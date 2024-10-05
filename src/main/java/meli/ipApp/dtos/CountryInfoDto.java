@@ -1,8 +1,5 @@
 package meli.ipApp.dtos;
 
-import static io.micrometer.common.util.StringUtils.isNotBlank;
-import static jdk.internal.org.commonmark.text.Characters.isBlank;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micrometer.common.util.StringUtils;
 import jakarta.annotation.PostConstruct;
@@ -32,14 +29,14 @@ public class CountryInfoDto {
   private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss (VV)");
   private String alpha2Code;
   private String name;
-  private List<Double> latlng =new ArrayList<>();
+  private List<Double> latlng = new ArrayList<>();
   private Double longitude;
   private Double latitude;
   private Double distBsAs;
-  private Set<CountryLenguageDto> languages=new HashSet<>();
-  private Set<CountryCoinInfoDto> currencies=new HashSet<>();
-  private List<String> timezones=new ArrayList<>();
-  private List<String> timezonesCustom=new ArrayList<>();
+  private Set<CountryLenguageDto> languages = new HashSet<>();
+  private Set<CountryCoinInfoDto> currencies = new HashSet<>();
+  private List<String> timezones = new ArrayList<>();
+  private List<String> timezonesCustom = new ArrayList<>();
 
   public static CountryInfoDto OUT_COUNTRY() {
     CountryInfoDto notFoundCountry = new CountryInfoDto();
@@ -51,12 +48,13 @@ public class CountryInfoDto {
 
   @PostConstruct
   public void setCustomLatlng() {
-    if (!this.latlng.isEmpty()){
+    if (!this.latlng.isEmpty()) {
       latitude = latlng.get(0);
       longitude = latlng.get(1);
     }
   }
-  public boolean hasLocalization(){
+
+  public boolean hasLocalization() {
     return !this.latlng.isEmpty();
   }
 
@@ -70,7 +68,7 @@ public class CountryInfoDto {
     this.timezones
         .stream()
         .filter(StringUtils::isNotBlank)
-        .map(s ->  ZonedDateTime.now(ZoneId.of(s)))
-        .forEach(time-> timezonesCustom.add(time.format(formatter)));
+        .map(s -> ZonedDateTime.now(ZoneId.of(s)))
+        .forEach(time -> timezonesCustom.add(time.format(formatter)));
   }
 }

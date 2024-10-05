@@ -13,7 +13,7 @@ public class IpInfoDto {
   private String countryCode;
   private CountryInfoDto countryInfoDto;
 
-  public void setTime(){
+  public void setTime() {
     countryInfoDto.setTime();
   }
 }
