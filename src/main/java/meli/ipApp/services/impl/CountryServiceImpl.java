@@ -29,26 +29,13 @@ public class CountryServiceImpl implements CountryService {
   public CountryServiceImpl(CountryClient countryClient, CoinService coinService) {
     this.coinService = coinService;
     Set<CountryInfoDto> countries = countryClient.getCountriesInfos();
-    countryInfoMap= new HashMap<>(countries.size()+NumberUtils.INTEGER_ONE);
+    countryInfoMap = new HashMap<>(countries.size() + NumberUtils.INTEGER_ONE);
 
     addCountry(CountryInfoDto.OUT_COUNTRY());
     addCountriesByService(countries);
     updateCoins();
 
     logger.debug("created");
-  }
-
-  private void addCountry(CountryInfoDto countryInfoDto) {
-    countryInfoMap.put(countryInfoDto.getAlpha2Code(),countryInfoDto);
-  }
-
-  private void addCountriesByService(final Set<CountryInfoDto> countries) {
-    setBaseCountry(findBaseCountryToDist(countries,ARGENTINA_CODE));
-    countries
-        .stream()
-        .peek(CountryInfoDto::setCustomLatlng)
-        .peek(this::setGeoDist)
-        .forEach(this::addCountry);
   }
 
   private static CountryInfoDto findBaseCountryToDist(Set<CountryInfoDto> countries, String code) {
@@ -59,13 +46,26 @@ public class CountryServiceImpl implements CountryService {
         .orElseThrow(() -> new AppException(CountryError.COUNTRY_BASE_NOT_FOUND));
   }
 
+  private void addCountry(CountryInfoDto countryInfoDto) {
+    countryInfoMap.put(countryInfoDto.getAlpha2Code(), countryInfoDto);
+  }
+
+  private void addCountriesByService(final Set<CountryInfoDto> countries) {
+    setBaseCountry(findBaseCountryToDist(countries, ARGENTINA_CODE));
+    countries
+        .stream()
+        .peek(CountryInfoDto::setCustomLatlng)
+        .peek(this::setGeoDist)
+        .forEach(this::addCountry);
+  }
+
   private void setBaseCountry(CountryInfoDto countryBase) {
     this.addCountry(countryBase);
     countryInfoMap.get(ARGENTINA_CODE).setCustomLatlng();
   }
 
   private void setGeoDist(CountryInfoDto countryInfoDto) {
-    if (countryInfoDto.hasLocalization()){
+    if (countryInfoDto.hasLocalization()) {
       countryInfoDto.setDistBsAs(this.calculateDist(countryInfoDto));
       logger.debug(
           "country {} calculated dist  {}",
@@ -75,8 +75,9 @@ public class CountryServiceImpl implements CountryService {
   }
 
   private Double calculateDist(CountryInfoDto countryInfoDto) {
-    if (countryInfoDto.equals(CountryInfoDto.OUT_COUNTRY()))
+    if (countryInfoDto.equals(CountryInfoDto.OUT_COUNTRY())) {
       return NumberUtils.DOUBLE_ZERO;
+    }
     CountryInfoDto countryBase = this.countryInfoMap.get(ARGENTINA_CODE);
     try {
       return HaversineCalculator.haversine(
