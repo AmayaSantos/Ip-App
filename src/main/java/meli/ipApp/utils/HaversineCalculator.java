@@ -2,7 +2,6 @@ package meli.ipApp.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import org.apache.commons.lang3.math.NumberUtils;
 
 public class HaversineCalculator {
 
@@ -18,12 +17,14 @@ public class HaversineCalculator {
 
     // Fórmula Haversine
     BigDecimal a = haversineFormula(dLat, lat1Rad, lat2Rad, dLon);
-    BigDecimal c = BigDecimal.valueOf(2).multiply(BigDecimal.valueOf(Math.atan2(Math.sqrt(a.doubleValue()), Math.sqrt(1 - a.doubleValue()))));
+    BigDecimal c = BigDecimal.valueOf(2).multiply(
+        BigDecimal.valueOf(Math.atan2(Math.sqrt(a.doubleValue()), Math.sqrt(1 - a.doubleValue()))));
 
     return R.multiply(c).setScale(0, RoundingMode.HALF_UP).doubleValue(); // Distancia en kilómetros
   }
 
-  private static BigDecimal haversineFormula(BigDecimal dLat, BigDecimal lat1Rad, BigDecimal lat2Rad, BigDecimal dLon) {
+  private static BigDecimal haversineFormula(BigDecimal dLat, BigDecimal lat1Rad,
+      BigDecimal lat2Rad, BigDecimal dLon) {
     BigDecimal sinDLat = BigDecimal.valueOf(Math.sin(dLat.doubleValue() / 2)).pow(2);
     BigDecimal sinDLon = BigDecimal.valueOf(Math.sin(dLon.doubleValue() / 2)).pow(2);
 
@@ -34,6 +35,7 @@ public class HaversineCalculator {
   }
 
   private static BigDecimal toRadians(BigDecimal deg) {
-    return deg.multiply(BigDecimal.valueOf(Math.PI)).divide(BigDecimal.valueOf(180), RoundingMode.HALF_UP);
+    return deg.multiply(BigDecimal.valueOf(Math.PI))
+        .divide(BigDecimal.valueOf(180), RoundingMode.HALF_UP);
   }
 }
