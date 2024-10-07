@@ -9,6 +9,7 @@ import meli.ipApp.dtos.CoinsInfoDto;
 import meli.ipApp.dtos.CountryCoinInfoDto;
 import meli.ipApp.dtos.CountryInfoDto;
 import meli.ipApp.dtos.IpInfoDto;
+import meli.ipApp.dtos.SymbolsDto;
 
 public class Mocks {
 
@@ -34,6 +35,9 @@ public class Mocks {
       .base("EUR")
       .rates(Map.of("EUR", 1.0, "USD", 1.0, "ARS", 1000.0))
       .build();
+
+  public static SymbolsDto mockSymbols = new SymbolsDto(
+      Map.of("EUR", "Euro","USD","Dollar", "ARS","Arge"));
 
   public static CoinsInfoDto mockCoinsClientWithOutUSD = CoinsInfoDto.builder()
       .base("EUR")

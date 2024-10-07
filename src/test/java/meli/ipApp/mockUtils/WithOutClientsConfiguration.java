@@ -35,6 +35,7 @@ public class WithOutClientsConfiguration {
     public static CoinClient mockCoinClient() {
       CoinClient mock = mock(CoinClient.class);
       when(mock.getCoinsInfo()).thenReturn(Mocks.mockCoins);
+      when(mock.getSupportedSymbols()).thenReturn(Mocks.mockSymbols);
       return mock;
     }
 
