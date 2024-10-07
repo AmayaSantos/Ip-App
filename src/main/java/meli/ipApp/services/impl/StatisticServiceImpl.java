@@ -87,7 +87,7 @@ public class StatisticServiceImpl implements StatisticService {
           getAverageDist()
       );
       return statisticDto;
-    } catch (Exception e){
+    } catch (Exception e) {
       logger.error("Error in get statistics {}", e.getMessage());
       throw e;
     } finally {
