@@ -21,6 +21,8 @@ public class WithOutClientsConfiguration {
       IpClient mock = mock(IpClient.class);
       when(mock.getIpInfo("3.44.196.93")).thenReturn(Mocks.mockIpSpain);
       when(mock.getIpInfo("13.44.196.93")).thenReturn(Mocks.mockIpAR);
+      when(mock.getIpInfo("23.44.196.93")).thenReturn(Mocks.mockIpNotCountry);
+
       return mock;
     }
 
