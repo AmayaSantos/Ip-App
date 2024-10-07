@@ -5,6 +5,8 @@ import meli.ipApp.dtos.CountryInfoDto;
 
 public interface CountryService {
 
+  CountryInfoDto getBaseCountry();
+
   void updateCoins();
 
   CountryInfoDto getCountryInfo(String countryCode);
