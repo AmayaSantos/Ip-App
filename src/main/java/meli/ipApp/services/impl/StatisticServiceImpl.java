@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
-import meli.ipApp.dtos.AverageDistanceDto;
+import meli.ipApp.dtos.AverageDataDto;
 import meli.ipApp.dtos.CountryInfoDto;
 import meli.ipApp.dtos.IpInfoDto;
 import meli.ipApp.dtos.StatisticCountryInfoDto;
@@ -82,9 +82,9 @@ public class StatisticServiceImpl implements StatisticService {
     lock.lock();
     try {
       StatisticDto statisticDto = new StatisticDto(
-          getNearestCountry(),
-          getFurthestCountry(),
-          getAverageDist()
+          getUnlockNearestCountry(),
+          getUnlockFurthestCountry(),
+          getUnlockAverageData()
       );
       return statisticDto;
     } catch (Exception e) {
@@ -96,21 +96,61 @@ public class StatisticServiceImpl implements StatisticService {
   }
 
   @Override
-  public BigDecimal getAverageDist() {
-    BigDecimal average = statisticCountryInfoDtoMap.values()
-        .stream()
-        .filter(StatisticCountryInfoDto::hasBeenCalled)
-        .map(AverageDistanceDto::new)
-        .reduce(AverageDistanceDto::reduce)
-        .orElseThrow(
-            () -> new AppException(StatisticError.WITHOUT_STATISTICS, HttpStatus.NO_CONTENT))
-        .getAverage();
-    logger.info("average dist got");
-    return average;
+  public AverageDataDto getAverageData() {
+    logger.info("try to get average data");
+    lock.lock();
+    try {
+      return getUnlockAverageData();
+    } catch (Exception e) {
+      logger.error("Error in get average data {}", e.getMessage());
+      throw e;
+    } finally {
+      lock.unlock();
+    }
   }
 
   @Override
   public StatisticCountryInfoDto getFurthestCountry() {
+    logger.info("try to get furthest country");
+    lock.lock();
+    try {
+      return getUnlockFurthestCountry();
+    } catch (Exception e) {
+      logger.error("Error in get furthest country {}", e.getMessage());
+      throw e;
+    } finally {
+      lock.unlock();
+    }
+  }
+
+  @Override
+  public StatisticCountryInfoDto getNearestCountry() {
+    logger.info("try to get nearest country");
+    lock.lock();
+    try {
+      return getUnlockNearestCountry();
+    } catch (Exception e) {
+      logger.error("Error in get nearest country {}", e.getMessage());
+      throw e;
+    } finally {
+      lock.unlock();
+    }
+  }
+
+  private AverageDataDto getUnlockAverageData() {
+    AverageDataDto average = statisticCountryInfoDtoMap.values()
+        .stream()
+        .filter(StatisticCountryInfoDto::hasBeenCalled)
+        .map(AverageDataDto::new)
+        .reduce(AverageDataDto::reduce)
+        .orElseThrow(
+            () -> new AppException(StatisticError.WITHOUT_STATISTICS, HttpStatus.NO_CONTENT))
+        .setAverage();
+    logger.info("average dist got");
+    return average;
+  }
+
+  private StatisticCountryInfoDto getUnlockFurthestCountry() {
     StatisticCountryInfoDto statisticCountryInfoDto1 = statisticCountryInfoDtoMap.values()
         .stream()
         .filter(StatisticCountryInfoDto::hasBeenCalled)
@@ -121,8 +161,7 @@ public class StatisticServiceImpl implements StatisticService {
     return statisticCountryInfoDto1;
   }
 
-  @Override
-  public StatisticCountryInfoDto getNearestCountry() {
+  private StatisticCountryInfoDto getUnlockNearestCountry() {
     StatisticCountryInfoDto statisticCountryInfoDto1 = statisticCountryInfoDtoMap.values()
         .stream()
         .filter(StatisticCountryInfoDto::hasBeenCalled)
