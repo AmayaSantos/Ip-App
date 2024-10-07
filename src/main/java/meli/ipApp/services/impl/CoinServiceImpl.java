@@ -1,12 +1,18 @@
 package meli.ipApp.services.impl;
 
+import static java.util.Objects.isNull;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import meli.ipApp.clients.CoinClient;
 import meli.ipApp.dtos.CoinsInfoDto;
+import meli.ipApp.exepctions.AppException;
+import meli.ipApp.exepctions.errors.CoinError;
 import meli.ipApp.services.CoinService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,6 +36,10 @@ public class CoinServiceImpl implements CoinService {
       return coinsInfo.getRates();
     }
 
+    if (isNull(coinsInfo.getRates().get(USD))) {
+      throw new AppException(CoinError.BASE_NOT_FOUND, HttpStatus.FAILED_DEPENDENCY);
+    }
+
     //estas acciones es por q mi cuenta free no puedo tener la base en dolar
     Map<String, Double> coinsOtherBase = coinsInfo.getRates();
     Double usdDivBase = coinsOtherBase.get(USD);
@@ -38,5 +48,10 @@ public class CoinServiceImpl implements CoinService {
         coins.put(s, usdDivBase / value));
     logger.debug("coins in USD base");
     return coins;
+  }
+
+  @Override
+  public Set<String> getSupportedSymbols() {
+    return coinClient.getSupportedSymbols().getSymbols().keySet();
   }
 }
