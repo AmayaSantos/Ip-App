@@ -33,7 +33,7 @@ public class CountryInfoDto {
   private Double longitude;
   private Double latitude;
   private Double distBsAs;
-  private Set<CountryLenguageDto> languages = new HashSet<>();
+  private Set<CountryLanguageDto> languages = new HashSet<>();
   private Set<CountryCoinInfoDto> currencies = new HashSet<>();
   private Set<String> supportCoins = new HashSet<>();
   private List<String> timezones = new ArrayList<>();
@@ -92,7 +92,7 @@ public class CountryInfoDto {
         .timezonesCustom(new ArrayList<>(timezonesCustom))
         .latlng(new ArrayList<>(latlng))
         .languages(this.languages.stream()
-            .map(CountryLenguageDto::copy)
+            .map(CountryLanguageDto::copy)
             .collect(Collectors.toSet()))
         .currencies(this.currencies.stream()
             .map(CountryCoinInfoDto::copy)
