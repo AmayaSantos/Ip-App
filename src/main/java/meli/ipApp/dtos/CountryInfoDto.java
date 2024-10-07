@@ -20,12 +20,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
+@Builder
 @EqualsAndHashCode
 public class CountryInfoDto {
 
   @JsonIgnore
-  private static final String OUT_COUNTRY_CODE = "1234";
+  private static final String OUT_COUNTRY_CODE = "NOT HAVE COUNTRY";
   private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss (VV)");
   private String alpha2Code;
   private String name;
@@ -40,11 +40,15 @@ public class CountryInfoDto {
   private List<String> timezonesCustom = new ArrayList<>();
 
   public static CountryInfoDto OUT_COUNTRY() {
-    CountryInfoDto notFoundCountry = new CountryInfoDto();
-    notFoundCountry.setAlpha2Code(OUT_COUNTRY_CODE);
-    notFoundCountry.setCurrencies(new HashSet<>());
-    notFoundCountry.setTimezones(new ArrayList<>());
-    return notFoundCountry;
+    return CountryInfoDto.builder()
+        .alpha2Code(OUT_COUNTRY_CODE)
+        .currencies(new HashSet<>(0))
+        .languages(new HashSet<>(0))
+        .supportCoins(new HashSet<>(0))
+        .timezones(new ArrayList<>(0))
+        .timezonesCustom(new ArrayList<>(0))
+        .latlng(new ArrayList<>(0))
+        .build();
   }
 
   public void setCustomLatlng() {

@@ -1,11 +1,11 @@
 package meli.ipApp.dtos;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@Builder
+@AllArgsConstructor
 @EqualsAndHashCode
 public class CountryLanguageDto {
 
@@ -13,9 +13,6 @@ public class CountryLanguageDto {
   private String iso639_1;
 
   public CountryLanguageDto copy() {
-    return CountryLanguageDto.builder()
-        .name(name)
-        .iso639_1(iso639_1)
-        .build();
+    return new CountryLanguageDto(this.name, this.iso639_1);
   }
 }
