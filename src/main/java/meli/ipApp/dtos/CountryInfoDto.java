@@ -2,7 +2,6 @@ package meli.ipApp.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.micrometer.common.util.StringUtils;
-import jakarta.annotation.PostConstruct;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +35,7 @@ public class CountryInfoDto {
   private Double distBsAs;
   private Set<CountryLenguageDto> languages = new HashSet<>();
   private Set<CountryCoinInfoDto> currencies = new HashSet<>();
+  private Set<String> supportCoins = new HashSet<>();
   private List<String> timezones = new ArrayList<>();
   private List<String> timezonesCustom = new ArrayList<>();
 
@@ -46,7 +47,6 @@ public class CountryInfoDto {
     return notFoundCountry;
   }
 
-  @PostConstruct
   public void setCustomLatlng() {
     if (!this.latlng.isEmpty()) {
       latitude = latlng.get(0);
@@ -59,9 +59,17 @@ public class CountryInfoDto {
   }
 
   public void updateCoinsInCountry(final Map<String, Double> coins) {
-    this.currencies
+    this.currencies.stream()
+        .filter(coinInfo -> supportCoins.contains(coinInfo.getCode()))
         .forEach(coinInfo ->
-            coinInfo.setDollarEquivalent(coins.get(coinInfo.getCode())));
+            coinInfo.updateCoin(coins.get(coinInfo.getCode())));
+  }
+
+  public void setSupportCoins(Set<String> supportCoins) {
+    this.supportCoins = this.currencies.stream()
+        .map(CountryCoinInfoDto::getCode)
+        .filter(supportCoins::contains)
+        .collect(Collectors.toSet());
   }
 
   public void setTime() {
@@ -70,5 +78,25 @@ public class CountryInfoDto {
         .filter(StringUtils::isNotBlank)
         .map(s -> ZonedDateTime.now(ZoneId.of(s)))
         .forEach(time -> timezonesCustom.add(time.format(formatter)));
+  }
+
+  public CountryInfoDto copy() {
+    return CountryInfoDto.builder()
+        .alpha2Code(alpha2Code)
+        .name(name)
+        .longitude(longitude)
+        .latitude(latitude)
+        .distBsAs(distBsAs)
+        .timezones(new ArrayList<>(timezones))
+        .supportCoins(new HashSet<>(supportCoins))
+        .timezonesCustom(new ArrayList<>(timezonesCustom))
+        .latlng(new ArrayList<>(latlng))
+        .languages(this.languages.stream()
+            .map(CountryLenguageDto::copy)
+            .collect(Collectors.toSet()))
+        .currencies(this.currencies.stream()
+            .map(CountryCoinInfoDto::copy)
+            .collect(Collectors.toSet()))
+        .build();
   }
 }
