@@ -72,8 +72,7 @@ public class StatisticServiceImpl implements StatisticService {
     Double distance = HaversineCalculator.haversine(baseCountry, ipInfoDto);
     StatisticCountryInfoDto statistic =
         statisticCountryInfoDtoMap.get(ipInfoDto.getCountryCode());
-    statistic.setCantCalled(BigDecimal.ONE);
-    statistic.setTotalDistance(statistic.getTotalDistance().add(BigDecimal.valueOf(distance)));
+    statistic.updateOutCountryDistance(distance);
   }
 
   @Override
@@ -145,7 +144,8 @@ public class StatisticServiceImpl implements StatisticService {
         .reduce(AverageDataDto::reduce)
         .orElseThrow(
             () -> new AppException(StatisticError.WITHOUT_STATISTICS, HttpStatus.NO_CONTENT))
-        .setAverage();
+        .setAverage()
+        .copy();
     logger.info("average dist got");
     return average;
   }
