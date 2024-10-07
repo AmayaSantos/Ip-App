@@ -116,14 +116,6 @@ public class CountryServiceImpl implements CountryService {
     }
   }
 
-  private Set<String> getCoinsSymbols() {
-    return countryInfoMap.values()
-        .stream()
-        .flatMap(countryInfo -> countryInfo.getCurrencies().stream())
-        .map(CountryCoinInfoDto::getCode)
-        .collect(Collectors.toSet());
-  }
-
   private Map<String, CountryInfoDto> getSafeCopy() {
     return this.countryInfoMap.values().stream()
         .map(CountryInfoDto::copy)
