@@ -3,11 +3,9 @@ package meli.ipApp.dtos;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 @AllArgsConstructor
 public class AverageDataDto {
 
@@ -29,5 +27,9 @@ public class AverageDataDto {
   public AverageDataDto setAverage() {
     this.average=totalDist.divide(totalCalls, RoundingMode.CEILING);
     return this;
+  }
+
+  public AverageDataDto copy() {
+    return new AverageDataDto(totalCalls, totalDist, average);
   }
 }
