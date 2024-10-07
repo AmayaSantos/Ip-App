@@ -8,6 +8,7 @@ import java.util.Set;
 import meli.ipApp.dtos.CoinsInfoDto;
 import meli.ipApp.dtos.CountryCoinInfoDto;
 import meli.ipApp.dtos.CountryInfoDto;
+import meli.ipApp.dtos.CountryLanguageDto;
 import meli.ipApp.dtos.IpInfoDto;
 import meli.ipApp.dtos.SymbolsDto;
 
@@ -26,7 +27,7 @@ public class Mocks {
   public static CountryInfoDto mockCountryES = CountryInfoDto.builder()
       .alpha2Code("ES")
       .latlng(List.of(40.0, -4.0))
-      .languages(new HashSet<>())
+      .languages(Set.of(new CountryLanguageDto("Spanish","es")))
       .timezones(List.of("UTC","UTC+01:00"))
       .timezonesCustom(new ArrayList<>())
       .currencies(new HashSet<>())
@@ -55,6 +56,11 @@ public class Mocks {
       .rates(Map.of("EUR", 1.0, "ARS", 1000.0))
       .build();
 
+  public static CoinsInfoDto mockCoinsClientBaseUSD = CoinsInfoDto.builder()
+      .base("USD")
+      .rates(Map.of("EUR", 1.0, "ARS", 1000.0,"USD", 1.0))
+      .build();
+
   public static CoinsInfoDto mockCoinsUpdated = CoinsInfoDto.builder()
       .base("EUR")
       .rates(Map.of("EUR", 1.0, "USD", 2.0, "ARS", 1100.0))
@@ -73,5 +79,12 @@ public class Mocks {
   public static IpInfoDto mockIpAR = IpInfoDto.builder()
       .ip("13.44.196.93")
       .countryCode("AR")
+      .build();
+
+  public static IpInfoDto mockIpNotCountry = IpInfoDto.builder()
+      .ip("23.44.196.93")
+      .countryCode(null)
+      .latitude(1.0)
+      .longitude(1.0)
       .build();
 }
