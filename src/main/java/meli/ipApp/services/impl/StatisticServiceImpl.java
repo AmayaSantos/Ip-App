@@ -79,11 +79,20 @@ public class StatisticServiceImpl implements StatisticService {
   @Override
   public StatisticDto getAllStatistics() {
     logger.info("try to get all statistics");
-    return new StatisticDto(
-        getNearestCountry(),
-        getFurthestCountry(),
-        getAverageDist()
-    );
+    lock.lock();
+    try {
+      StatisticDto statisticDto = new StatisticDto(
+          getNearestCountry(),
+          getFurthestCountry(),
+          getAverageDist()
+      );
+      return statisticDto;
+    } catch (Exception e){
+      logger.error("Error in get statistics {}", e.getMessage());
+      throw e;
+    } finally {
+      lock.unlock();
+    }
   }
 
   @Override
