@@ -1,30 +1,25 @@
 package meli.ipApp.controllers;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+import meli.ipApp.dtos.IpInfoDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 @SpringBootTest
-@AutoConfigureMockMvc
 public class IpControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
-
-
+ @Autowired
+ private IpController ipController;
   @Test
   public void testGetIpInfo() throws Exception {
 
-    mockMvc.perform(get("/api/ip/123.123.123.123")
-            .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    ResponseEntity<IpInfoDto> ipInfo = ipController.getIpInfo("8.8.8.8");
+
+    assertEquals(ipInfo.getStatusCode(), HttpStatus.OK);
+    assertNotNull(ipInfo.getBody());
   }
 }
