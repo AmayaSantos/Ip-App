@@ -52,4 +52,14 @@ class CoinServiceImplTest {
     Assertions.assertEquals(CoinError.BASE_NOT_FOUND.getMessage(), exception.getMessage());
   }
 
+
+  @Test
+  void haveBaseUSD() {
+
+    when(coinClient.getCoinsInfo()).thenReturn(Mocks.mockCoinsClientBaseUSD);
+
+    Map<String, Double> coinsEquivalentDollar = coinService.getCoinsEquivalentDollar();
+
+    Assertions.assertEquals(coinsEquivalentDollar.get(USD),NumberUtils.DOUBLE_ONE);
+  }
 }
