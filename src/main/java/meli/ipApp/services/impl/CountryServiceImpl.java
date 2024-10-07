@@ -8,7 +8,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import meli.ipApp.clients.CountryClient;
-import meli.ipApp.dtos.CountryCoinInfoDto;
 import meli.ipApp.dtos.CountryInfoDto;
 import meli.ipApp.exepctions.AppException;
 import meli.ipApp.exepctions.errors.CountryError;
@@ -86,16 +85,9 @@ public class CountryServiceImpl implements CountryService {
   }
 
   private Double calculateDist(CountryInfoDto countryInfoDto) {
-    if (countryInfoDto.equals(CountryInfoDto.OUT_COUNTRY())) {
-      return NumberUtils.DOUBLE_ZERO;
-    }
     CountryInfoDto countryBase = this.countryInfoMap.get(ARGENTINA_CODE);
-    try {
-      return HaversineCalculator.haversine(countryInfoDto, countryBase);
-    } catch (Exception e) {
-      logger.error(e.getMessage());
-    }
-    return NumberUtils.DOUBLE_ZERO;
+    return HaversineCalculator.haversine(countryInfoDto, countryBase);
+
   }
 
   @Override
@@ -166,6 +158,5 @@ public class CountryServiceImpl implements CountryService {
     this.addCountry(baseCountry);
     baseCountry.setCustomLatlng();
   }
-
 
 }
