@@ -1,0 +1,46 @@
+@startuml
+        !theme crt-green from https://raw.githubusercontent.com/plantuml/plantuml/master/themes
+
+        actor Usuario #green
+        ' The only difference between actor
+        'and participant is the drawing
+
+        participant MainController
+        participant MainService
+
+        participant IpInfoService
+        participant IpInfoClient
+
+        participant GeoService
+        participant CoinService
+
+        participant StatisticsService
+
+        Usuario ->MainController: "/ip?xxx.xxx.xxx.xxx"
+
+        MainController->MainService: getIpInfo(Ip)
+
+        MainService->IpInfoService: getIpInfo(Ip)
+
+
+        IpInfoService-> IpInfoClient: getIpInfo(Ip)
+
+        IpInfoService<- IpInfoClient: IpDto
+
+
+        MainService->GeoService: updateWithGeoLocation(IpDto)
+
+        IpInfoService<- GeoService: IpDto
+
+
+        MainService->CoinService: updateWithCoinData(IpDto)
+
+        IpInfoService<- CoinService: IpDto
+
+
+        MainService->StatisticsService: updateSStatistics(IpDto)#Async
+
+        MainController<-MainService: IpInfoDto
+        Usuario <-MainController: IpInfoDto
+
+        @enduml
