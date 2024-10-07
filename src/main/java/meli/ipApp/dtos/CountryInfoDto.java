@@ -103,4 +103,8 @@ public class CountryInfoDto {
             .collect(Collectors.toSet()))
         .build();
   }
+
+  public boolean isOutCountry() {
+    return this.getAlpha2Code().equals(OUT_COUNTRY_CODE);
+  }
 }

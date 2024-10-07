@@ -22,4 +22,12 @@ public class IpInfoDto {
   public void setTime() {
     countryInfoDto.setTime();
   }
+
+  public boolean isOutCountry() {
+    return countryInfoDto.isOutCountry();
+  }
+
+  public void setOutCountryCode() {
+    this.countryCode= countryInfoDto.getAlpha2Code();
+  }
 }

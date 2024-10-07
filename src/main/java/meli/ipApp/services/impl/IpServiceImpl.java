@@ -28,9 +28,8 @@ public class IpServiceImpl implements IpService {
     IpInfoDto ipInfo = ipClient.getIpInfo(ip);
     ipInfo.setCountryInfoDto(countryService.getCountryInfo(ipInfo.getCountryCode()));
 
-    if (CountryInfoDto.OUT_COUNTRY().equals(ipInfo.getCountryInfoDto())) {
-      ipInfo.setCountryCode(CountryInfoDto.OUT_COUNTRY().getAlpha2Code());
-    }
+    if (ipInfo.isOutCountry())
+      ipInfo.setOutCountryCode();
 
     ipInfo.setTime();
     statisticService.updateStatisticsWith(ipInfo);

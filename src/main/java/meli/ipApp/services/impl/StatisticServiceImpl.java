@@ -1,7 +1,6 @@
 package meli.ipApp.services.impl;
 
 import jakarta.annotation.PostConstruct;
-import java.math.BigDecimal;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -61,7 +60,7 @@ public class StatisticServiceImpl implements StatisticService {
   private void unlockedUpdateStatisticsWith(IpInfoDto ipInfoDto) {
     statisticCountryInfoDtoMap.get(ipInfoDto.getCountryCode())
         .incrementCant();
-    if (ipInfoDto.getCountryCode().equals(CountryInfoDto.OUT_COUNTRY().getAlpha2Code())) {
+    if (ipInfoDto.isOutCountry()) {
       updateOutCountryDist(ipInfoDto);
     }
     logger.info("statistic updated {}", statisticCountryInfoDtoMap.get(ipInfoDto.getCountryCode()));

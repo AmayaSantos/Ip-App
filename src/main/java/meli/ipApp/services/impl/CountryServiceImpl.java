@@ -130,6 +130,9 @@ public class CountryServiceImpl implements CountryService {
               CountryInfoDto.OUT_COUNTRY())
           .copy();
 
+      if (copy.isOutCountry())
+        copy.setDistBsAs(HaversineCalculator.haversine(copy,baseCountry));
+
       logger.info("country copy of {}", copy.getAlpha2Code());
       return copy;
 
