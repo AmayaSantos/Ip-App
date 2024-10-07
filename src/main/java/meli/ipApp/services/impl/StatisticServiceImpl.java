@@ -1,5 +1,6 @@
 package meli.ipApp.services.impl;
 
+import jakarta.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
@@ -14,6 +15,7 @@ import meli.ipApp.exepctions.AppException;
 import meli.ipApp.exepctions.errors.StatisticError;
 import meli.ipApp.services.CountryService;
 import meli.ipApp.services.StatisticService;
+import meli.ipApp.utils.HaversineCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,18 +26,24 @@ import org.springframework.stereotype.Service;
 public class StatisticServiceImpl implements StatisticService {
 
   private final Logger logger = LoggerFactory.getLogger(StatisticServiceImpl.class);
-  private final Map<String, StatisticCountryInfoDto> statisticCountryInfoDtoMap;
+  private final CountryService countryService;
   private final Lock lock = new ReentrantLock();
+  private Map<String, StatisticCountryInfoDto> statisticCountryInfoDtoMap;
 
 
   public StatisticServiceImpl(CountryService countryService) {
-    Map<String, CountryInfoDto> countries = countryService.getCountriesInfo();
-
-    this.statisticCountryInfoDtoMap = countries.values()
-        .stream()
-        .map(StatisticCountryInfoDto::new)
-        .collect(Collectors.toMap(StatisticCountryInfoDto::getCountryCode, s -> s));
+    this.countryService = countryService;
     logger.debug("created");
+  }
+
+  @PostConstruct
+  public void init() {
+    this.statisticCountryInfoDtoMap =
+        countryService.getCountriesInfo()
+            .values()
+            .stream()
+            .map(StatisticCountryInfoDto::new)
+            .collect(Collectors.toMap(StatisticCountryInfoDto::getCountryCode, s -> s));
   }
 
   @Override
@@ -53,7 +61,19 @@ public class StatisticServiceImpl implements StatisticService {
   private void unlockedUpdateStatisticsWith(IpInfoDto ipInfoDto) {
     statisticCountryInfoDtoMap.get(ipInfoDto.getCountryCode())
         .incrementCant();
-    logger.info("statistic updated");
+    if (ipInfoDto.getCountryCode().equals(CountryInfoDto.OUT_COUNTRY().getAlpha2Code())) {
+      updateOutCountryDist(ipInfoDto);
+    }
+    logger.info("statistic updated {}", statisticCountryInfoDtoMap.get(ipInfoDto.getCountryCode()));
+  }
+
+  private void updateOutCountryDist(IpInfoDto ipInfoDto) {
+    CountryInfoDto baseCountry = countryService.getBaseCountry();
+    Double distance = HaversineCalculator.haversine(baseCountry, ipInfoDto);
+    StatisticCountryInfoDto statistic =
+        statisticCountryInfoDtoMap.get(ipInfoDto.getCountryCode());
+    statistic.setCantCalled(BigDecimal.ONE);
+    statistic.setTotalDistance(statistic.getTotalDistance().add(BigDecimal.valueOf(distance)));
   }
 
   @Override
