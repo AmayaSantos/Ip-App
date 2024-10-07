@@ -2,10 +2,13 @@ package meli.ipApp.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import meli.ipApp.dtos.CountryInfoDto;
+import meli.ipApp.dtos.IpInfoDto;
 
 public class HaversineCalculator {
 
   private static final BigDecimal R = new BigDecimal("6371.0"); // Radio de la Tierra en kilómetros
+
 
   public static Double haversine(double lat1, double lon1, double lat2, double lon2) {
     // Convertir grados a radianes
@@ -37,5 +40,23 @@ public class HaversineCalculator {
   private static BigDecimal toRadians(BigDecimal deg) {
     return deg.multiply(BigDecimal.valueOf(Math.PI))
         .divide(BigDecimal.valueOf(180), RoundingMode.HALF_UP);
+  }
+
+  public static Double haversine(CountryInfoDto countryInfoDto, CountryInfoDto countryBase) {
+    return HaversineCalculator.haversine(
+        countryInfoDto.getLatitude(),
+        countryInfoDto.getLongitude(),
+        countryBase.getLatitude(),
+        countryBase.getLongitude()
+    );
+  }
+
+  public static Double haversine(CountryInfoDto countryInfoDto, IpInfoDto ipInfoDto) {
+    return HaversineCalculator.haversine(
+        ipInfoDto.getLatitude(),
+        ipInfoDto.getLongitude(),
+        countryInfoDto.getLatitude(),
+        countryInfoDto.getLongitude()
+    );
   }
 }
