@@ -20,18 +20,10 @@ public class IpController {
   @Autowired
   private IpService ipService;
 
-  @Autowired
-  private StatisticService statisticService;
-
   @GetMapping(path = "{ip}")
   @Operation(summary = "Get ip info")
   public ResponseEntity<IpInfoDto> getIpInfo(@PathVariable String ip) {
     return new ResponseEntity<>(ipService.getIpInfo(ip), HttpStatus.OK);
   }
 
-  @GetMapping(path = "/allStatistics")
-  @Operation(summary = "Get all statistics")
-  public ResponseEntity<StatisticDto> getAllStatitics() {
-    return new ResponseEntity<>(statisticService.getAllStatistics(), HttpStatus.OK);
-  }
 }
