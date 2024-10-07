@@ -23,17 +23,28 @@ public class Mocks {
       .currencies(Set.of(new CountryCoinInfoDto("ARS", 1000.0)))
       .build();
 
+  public static CountryInfoDto mockCountryES = CountryInfoDto.builder()
+      .alpha2Code("ES")
+      .latlng(List.of(40.0, -4.0))
+      .languages(new HashSet<>())
+      .timezones(List.of("UTC","UTC+01:00"))
+      .timezonesCustom(new ArrayList<>())
+      .currencies(new HashSet<>())
+      .currencies(Set.of(new CountryCoinInfoDto("EUR", null)))
+      .build();
+
   public static Set<CountryInfoDto> mockCountries =
-      Set.of(Mocks.mockCountryAR);
+      Set.of(Mocks.mockCountryAR,mockCountryES);
 
   public static Map<String, CountryInfoDto> mockCountriesInService =
       Map.of(
           CountryInfoDto.OUT_COUNTRY().getAlpha2Code(), CountryInfoDto.OUT_COUNTRY(),
-          Mocks.mockCountryAR.getAlpha2Code(), Mocks.mockCountryAR);
+          Mocks.mockCountryAR.getAlpha2Code(), Mocks.mockCountryAR,
+          Mocks.mockCountryES.getAlpha2Code(),Mocks.mockCountryES);
 
   public static CoinsInfoDto mockCoins = CoinsInfoDto.builder()
       .base("EUR")
-      .rates(Map.of("EUR", 1.0, "USD", 1.0, "ARS", 1000.0))
+      .rates(Map.of("EUR", 1.0, "USD", 1.1, "ARS", 1000.0))
       .build();
 
   public static SymbolsDto mockSymbols = new SymbolsDto(
@@ -53,8 +64,14 @@ public class Mocks {
       .base("EUR")
       .rates(Map.of("EUR", 1.0, "USD", 2.0))
       .build();
+
   public static IpInfoDto mockIpSpain = IpInfoDto.builder()
       .ip("3.44.196.93")
       .countryCode("ES")
+      .build();
+
+  public static IpInfoDto mockIpAR = IpInfoDto.builder()
+      .ip("13.44.196.93")
+      .countryCode("AR")
       .build();
 }

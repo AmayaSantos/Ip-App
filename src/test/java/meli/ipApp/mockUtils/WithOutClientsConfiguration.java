@@ -19,6 +19,8 @@ public class WithOutClientsConfiguration {
     @Primary
     public static IpClient mockIpClient() {
       IpClient mock = mock(IpClient.class);
+      when(mock.getIpInfo("3.44.196.93")).thenReturn(Mocks.mockIpSpain);
+      when(mock.getIpInfo("13.44.196.93")).thenReturn(Mocks.mockIpAR);
       return mock;
     }
 
