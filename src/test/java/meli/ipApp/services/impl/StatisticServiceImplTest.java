@@ -46,7 +46,7 @@ class StatisticServiceImplTest {
     AverageDataDto average = statisticService.getAverageData();
 
     assertNotNull(average);
-    assertEquals(average.getAverage().multiply(average.getTotalCalls()).setScale(0, RoundingMode.HALF_UP).compareTo(average.getTotalDist()) ,0);
+    assertEquals(average.getTotalDist().divide(average.getTotalCalls(), 0, RoundingMode.HALF_UP),average.getAverage());
   }
 
   @Test
@@ -61,7 +61,7 @@ class StatisticServiceImplTest {
     BigDecimal newTotalDist = average.getTotalDist()
         .add(BigDecimal.valueOf(ipInfoAR.getCountryInfoDto().getDistBsAs()));
     BigDecimal newTotalCalls = average.getTotalCalls().add(BigDecimal.ONE);
-    BigDecimal newAverage = newTotalDist.divide(newTotalCalls);
+    BigDecimal newAverage = newTotalDist.divide(newTotalCalls, 0, RoundingMode.HALF_UP);
 
     assertNotNull(average);
     assertEquals(averageUpdated.getAverage(), newAverage );
@@ -72,11 +72,11 @@ class StatisticServiceImplTest {
 
   @Test
   void getFurthestCountry() {
-    IpInfoDto ipInfoAR = ipService.getIpInfo("3.44.196.93");
+    IpInfoDto ipInfoES = ipService.getIpInfo("3.44.196.93");
     StatisticCountryInfoDto furthestCountry = statisticService.getFurthestCountry();
 
     assertNotNull(furthestCountry);
-    assertEquals(ipInfoAR.getCountryCode(),furthestCountry.getCountryCode());
+    assertEquals(ipInfoES.getCountryCode(),furthestCountry.getCountryCode());
   }
 
   @Test
@@ -99,5 +99,22 @@ class StatisticServiceImplTest {
 
     assertTrue(furthestCountry.getDistBsAs().compareTo(nearestCountry.getDistBsAs()) > 0);
     assertTrue(furtest.getCountryInfoDto().getDistBsAs() > near.getCountryInfoDto().getDistBsAs() );
+  }
+
+  @Test
+  void updateStatisticsWithIp() {
+    AverageDataDto oldAverage = statisticService.getAverageData();
+
+    IpInfoDto near = ipService.getIpInfo("13.44.196.93");
+    statisticService.updateStatisticsWith(near);
+
+    AverageDataDto newAverage = statisticService.getAverageData();
+
+    assertNotEquals(oldAverage, newAverage);
+  }
+
+  @Test
+  void updateStatisticsWithIpWithoutCountry() {
+    assertNotNull(ipService.getIpInfo("23.44.196.93"));
   }
 }

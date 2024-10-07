@@ -25,7 +25,7 @@ public class AverageDataDto {
   }
 
   public AverageDataDto setAverage() {
-    this.average=totalDist.divide(totalCalls, RoundingMode.CEILING);
+    this.average=totalDist.divide(totalCalls,0, RoundingMode.HALF_UP);
     return this;
   }
 
