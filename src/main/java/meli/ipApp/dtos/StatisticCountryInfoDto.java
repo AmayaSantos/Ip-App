@@ -13,10 +13,13 @@ public class StatisticCountryInfoDto {
   private static final BigDecimal INIT_CANT = BigDecimal.ZERO;
   private BigDecimal cantCalled;
   private CountryInfoDto country;
+  private BigDecimal totalDistance;
 
   public StatisticCountryInfoDto(CountryInfoDto country) {
     this.cantCalled = INIT_CANT;
     this.country = country;
+    this.totalDistance = INIT_CANT;
+
   }
 
   public String getCountryCode() {
@@ -24,7 +27,7 @@ public class StatisticCountryInfoDto {
   }
 
   public void incrementCant() {
-    this.cantCalled.add(BigDecimal.ONE);
+    this.cantCalled = this.cantCalled.add(BigDecimal.ONE);
   }
 
   public boolean hasBeenCalled() {
@@ -36,6 +39,9 @@ public class StatisticCountryInfoDto {
   }
 
   public BigDecimal getTotalDist() {
+    if (CountryInfoDto.OUT_COUNTRY().getAlpha2Code().equals(country.getAlpha2Code())) {
+      return totalDistance;
+    }
     return BigDecimal.valueOf(country.getDistBsAs())
         .multiply(cantCalled);
   }
