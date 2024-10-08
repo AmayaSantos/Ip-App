@@ -5,42 +5,30 @@
         ' The only difference between actor
         'and participant is the drawing
 
-        participant MainController
-        participant MainService
+        participant IpController
+        participant IpService
 
-        participant IpInfoService
-        participant IpInfoClient
+        participant IpClient
 
-        participant GeoService
+        participant CountryService
         participant CoinService
 
         participant StatisticsService
 
-        Usuario ->MainController: "/ip?xxx.xxx.xxx.xxx"
+        Usuario -> IpController: "/ip?xxx.xxx.xxx.xxx"
 
-        MainController->MainService: getIpInfo(Ip)
+        IpController->IpService: getIpInfo(Ip)
 
-        MainService->IpInfoService: getIpInfo(Ip)
+        IpService-> IpClient: getIpInfo(Ip)
 
+        IpService<-IpClient: IpInfoDto
 
-        IpInfoService-> IpInfoClient: getIpInfo(Ip)
+        IpService->CountryService: getCountryInfo(IpDto)
+        IpService<-CountryService: CountryInfoDto #copy
 
-        IpInfoService<- IpInfoClient: IpDto
+        IpService->StatisticsService: updateStatisticsWith(IpDto)#Async
 
-
-        MainService->GeoService: updateWithGeoLocation(IpDto)
-
-        IpInfoService<- GeoService: IpDto
-
-
-        MainService->CoinService: updateWithCoinData(IpDto)
-
-        IpInfoService<- CoinService: IpDto
-
-
-        MainService->StatisticsService: updateSStatistics(IpDto)#Async
-
-        MainController<-MainService: IpInfoDto
-        Usuario <-MainController: IpInfoDto
+        IpController<-IpService: IpInfoDto
+        Usuario <-IpController: IpInfoDto
 
         @enduml
