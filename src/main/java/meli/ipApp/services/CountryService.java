@@ -2,6 +2,7 @@ package meli.ipApp.services;
 
 import java.util.Map;
 import meli.ipApp.dtos.CountryInfoDto;
+import meli.ipApp.dtos.IpInfoDto;
 
 public interface CountryService {
 
@@ -9,7 +10,7 @@ public interface CountryService {
 
   void updateCoins();
 
-  CountryInfoDto getCountryInfo(String countryCode);
+  CountryInfoDto getCountryInfo(IpInfoDto countryCode);
 
   Map<String, CountryInfoDto> getCountriesInfo();
 }
