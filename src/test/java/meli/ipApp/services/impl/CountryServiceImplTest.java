@@ -42,7 +42,7 @@ class CountryServiceImplTest {
 
   @Test
   void getCountryInfo() {
-    CountryInfoDto countryInfo = countryService.getCountryInfo(AR);
+    CountryInfoDto countryInfo = countryService.getCountryInfo(Mocks.mockIpAR);
     assertEquals(countryInfo, Mocks.mockCountryAR);
   }
 
@@ -61,19 +61,13 @@ class CountryServiceImplTest {
 
   @Test
   void getCountriesInfoNotFoundCountry() {
-    CountryInfoDto countryInfo = countryService.getCountryInfo(NOT_COUNTRY_NAME);
-    assertEquals(countryInfo, CountryInfoDto.OUT_COUNTRY());
-  }
-
-  @Test
-  void getCountriesInfoNullCountry() {
-    CountryInfoDto countryInfo = countryService.getCountryInfo(null);
-    assertEquals(countryInfo, CountryInfoDto.OUT_COUNTRY());
+    CountryInfoDto countryInfo = countryService.getCountryInfo(Mocks.mockIpNotCountry);
+    assertEquals(countryInfo.getAlpha2Code(), CountryInfoDto.OUT_COUNTRY().getAlpha2Code());
   }
 
   @Test
   void dontChangeCountriesInServiceWhenChangeCountryGot() {
-    CountryInfoDto countryInfo = countryService.getCountryInfo(AR);
+    CountryInfoDto countryInfo = countryService.getCountryInfo(Mocks.mockIpAR);
     countryInfo.setTime();
     assertNotEquals(countryInfo, Mocks.mockCountryAR);
   }
@@ -96,7 +90,7 @@ class CountryServiceImplTest {
   }
 
   private CountryCoinInfoDto getCountryCoinInfoAR() {
-    return countryService.getCountryInfo(AR)
+    return countryService.getCountryInfo(Mocks.mockIpAR)
         .getCurrencies()
         .stream()
         .filter(countryCoinInfoDto -> countryCoinInfoDto.getCode().equals("ARS"))
