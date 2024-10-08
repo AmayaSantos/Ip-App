@@ -2,6 +2,7 @@ package meli.ipApp.services.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.util.Map;
@@ -50,6 +51,13 @@ class CountryServiceImplTest {
     Map<String, CountryInfoDto> countriesInfo = countryService.getCountriesInfo();
     assertEquals(countriesInfo, Mocks.mockCountriesInService);
   }
+
+  @Test
+  void getBaseCountry() {
+    CountryInfoDto baseCountry = countryService.getBaseCountry();
+    assertNotNull(baseCountry.getAlpha2Code());
+  }
+
 
   @Test
   void getCountriesInfoNotFoundCountry() {
@@ -121,5 +129,13 @@ class CountryServiceImplTest {
   void notLockInError() {
     errorWhenUpdate();
     updateCoins();
+  }
+
+  @Test
+  void testGetCountryInfo() {
+    Map<String, CountryInfoDto> countriesInfo = countryService.getCountriesInfo();
+    assertEquals(countriesInfo, Mocks.mockCountriesInService);
+    assertNotNull(countriesInfo);
+
   }
 }
