@@ -48,7 +48,7 @@ public class Mocks {
       .rates(Map.of("EUR", 1.0, "USD", 1.1, "ARS", 1000.0))
       .build();
 
-  public static SymbolsDto mockSymbols = new SymbolsDto(
+  public static SymbolsDto mockSymbols = new SymbolsDto(true,
       Map.of("EUR", "Euro","USD","Dollar", "ARS","Arge"));
 
   public static CoinsInfoDto mockCoinsClientWithOutUSD = CoinsInfoDto.builder()
