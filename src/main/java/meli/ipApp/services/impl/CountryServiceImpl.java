@@ -1,6 +1,5 @@
 package meli.ipApp.services.impl;
 
-import jakarta.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +34,7 @@ public class CountryServiceImpl implements CountryService {
   public CountryServiceImpl(CountryClient countryClient, CoinService coinService) {
     this.coinService = coinService;
     this.countryClient = countryClient;
+    setCountryInfo();
     logger.debug("created");
   }
 
@@ -46,8 +46,7 @@ public class CountryServiceImpl implements CountryService {
         .orElseThrow(() -> new AppException(CountryError.COUNTRY_BASE_NOT_FOUND));
   }
 
-  @PostConstruct
-  private void setup() {
+  private void  setCountryInfo() {
     try {
       Set<CountryInfoDto> countries = countryClient.getCountriesInfos();
       countryInfoMap = new HashMap<>(countries.size() + NumberUtils.INTEGER_ONE);
@@ -56,7 +55,7 @@ public class CountryServiceImpl implements CountryService {
       setSupportedCoinsInCountries();
       updateCoins();
     } catch (AppException e) {
-      new IllegalStateException(e.getMessage());
+      throw new IllegalStateException(e.getMessage());
     }
   }
 
@@ -160,7 +159,7 @@ public class CountryServiceImpl implements CountryService {
 
   @Override
   public CountryInfoDto getBaseCountry() {
-    return baseCountry;
+    return baseCountry.copy();
   }
 
   private void setBaseCountry(Set<CountryInfoDto> countries) {

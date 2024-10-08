@@ -1,6 +1,5 @@
 package meli.ipApp.services.impl;
 
-import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -28,21 +27,23 @@ public class StatisticServiceImpl implements StatisticService {
   private final CountryService countryService;
   private final Lock lock = new ReentrantLock();
   private Map<String, StatisticCountryInfoDto> statisticCountryInfoDtoMap;
-
+  private CountryInfoDto baseCountry;
 
   public StatisticServiceImpl(CountryService countryService) {
     this.countryService = countryService;
+    setCountryInfo();
     logger.debug("created");
   }
 
-  @PostConstruct
-  public void init() {
+  public void setCountryInfo() {
     this.statisticCountryInfoDtoMap =
         countryService.getCountriesInfo()
             .values()
             .stream()
             .map(StatisticCountryInfoDto::new)
             .collect(Collectors.toMap(StatisticCountryInfoDto::getCountryCode, s -> s));
+    baseCountry = countryService.getBaseCountry();
+
   }
 
   @Override
@@ -67,7 +68,6 @@ public class StatisticServiceImpl implements StatisticService {
   }
 
   private void updateOutCountryDist(IpInfoDto ipInfoDto) {
-    CountryInfoDto baseCountry = countryService.getBaseCountry();
     Double distance = HaversineCalculator.haversine(baseCountry, ipInfoDto);
     StatisticCountryInfoDto statistic =
         statisticCountryInfoDtoMap.get(ipInfoDto.getCountryCode());
