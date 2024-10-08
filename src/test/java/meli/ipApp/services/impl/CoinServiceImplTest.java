@@ -52,7 +52,6 @@ class CoinServiceImplTest {
     Assertions.assertEquals(CoinError.BASE_NOT_FOUND.getMessage(), exception.getMessage());
   }
 
-
   @Test
   void haveBaseUSD() {
 

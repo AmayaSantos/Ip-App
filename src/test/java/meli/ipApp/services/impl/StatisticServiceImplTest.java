@@ -98,7 +98,7 @@ class StatisticServiceImplTest {
     StatisticCountryInfoDto furthestCountry = statisticService.getFurthestCountry();
 
     assertTrue(furthestCountry.getDistBsAs().compareTo(nearestCountry.getDistBsAs()) > 0);
-    assertTrue(furtest.getCountryInfoDto().getDistBsAs() > near.getCountryInfoDto().getDistBsAs() );
+    assertTrue(furtest.getCountryInfoDto().getDistBsAs().compareTo(near.getCountryInfoDto().getDistBsAs()) > 0 );
   }
 
   @Test
