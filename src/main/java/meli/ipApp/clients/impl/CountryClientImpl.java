@@ -62,8 +62,9 @@ public class CountryClientImpl implements CountryClient {
             new ParameterizedTypeReference<Set<CountryInfoDto>>() {
             });
 
-    if (HttpStatus.OK.equals(responseEntity.getStatusCode())) {
-      return responseEntity.getBody();
+     if (HttpStatus.OK.equals(responseEntity.getStatusCode()) &&
+          responseEntity.hasBody() && !responseEntity.getBody().isEmpty()) {
+       return responseEntity.getBody();
     } else {
       throw new AppException(CountryError.EXTERNAL_COUNTRY_APP_ERROR, HttpStatus.FAILED_DEPENDENCY);
     }

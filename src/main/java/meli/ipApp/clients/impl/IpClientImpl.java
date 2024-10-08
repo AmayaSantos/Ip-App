@@ -1,5 +1,7 @@
 package meli.ipApp.clients.impl;
 
+import static java.util.Objects.nonNull;
+
 import meli.ipApp.clients.IpClient;
 import meli.ipApp.dtos.IpInfoDto;
 import meli.ipApp.exepctions.AppException;
@@ -60,7 +62,9 @@ public class IpClientImpl implements IpClient {
             new HttpEntity<>(new HttpHeaders()),
             IpInfoDto.class);
 
-    if (HttpStatus.OK.equals(responseEntity.getStatusCode())) {
+    if (HttpStatus.OK.equals(responseEntity.getStatusCode())
+        && responseEntity.hasBody()
+        && nonNull(responseEntity.getBody().getCountryCode())) {
       return responseEntity.getBody();
     } else {
       throw new AppException(IpError.EXTERNAL_IP_APP_ERROR, HttpStatus.FAILED_DEPENDENCY);

@@ -80,7 +80,8 @@ public class CoinClientImpl implements CoinClient {
             new HttpEntity<>(new HttpHeaders()),
             CoinsInfoDto.class);
 
-    if (HttpStatus.OK.equals(responseEntity.getStatusCode())) {
+    if (HttpStatus.OK.equals(responseEntity.getStatusCode()) &&
+        responseEntity.hasBody() && responseEntity.getBody().getSuccess()) {
       return responseEntity.getBody();
     } else {
       throw new AppException(CoinError.EXTERNAL_COIN_APP_ERROR, HttpStatus.FAILED_DEPENDENCY);
@@ -97,7 +98,8 @@ public class CoinClientImpl implements CoinClient {
             new HttpEntity<>(new HttpHeaders()),
             SymbolsDto.class);
 
-    if (HttpStatus.OK.equals(responseEntity.getStatusCode())) {
+    if (HttpStatus.OK.equals(responseEntity.getStatusCode()) &&
+        responseEntity.hasBody() && responseEntity.getBody().getSuccess()) {
       return responseEntity.getBody();
     } else {
       throw new AppException(CoinError.EXTERNAL_COIN_APP_ERROR, HttpStatus.FAILED_DEPENDENCY);
