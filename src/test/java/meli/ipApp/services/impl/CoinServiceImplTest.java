@@ -59,6 +59,6 @@ class CoinServiceImplTest {
 
     Map<String, Double> coinsEquivalentDollar = coinService.getCoinsEquivalentDollar();
 
-    Assertions.assertEquals(coinsEquivalentDollar.get(USD),NumberUtils.DOUBLE_ONE);
+    Assertions.assertEquals(coinsEquivalentDollar.get(USD), NumberUtils.DOUBLE_ONE);
   }
 }

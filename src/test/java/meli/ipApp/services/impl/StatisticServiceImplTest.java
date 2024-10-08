@@ -46,7 +46,8 @@ class StatisticServiceImplTest {
     AverageDataDto average = statisticService.getAverageData();
 
     assertNotNull(average);
-    assertEquals(average.getTotalDist().divide(average.getTotalCalls(), 0, RoundingMode.HALF_UP),average.getAverage());
+    assertEquals(average.getTotalDist().divide(average.getTotalCalls(), 0, RoundingMode.HALF_UP),
+        average.getAverage());
   }
 
   @Test
@@ -64,9 +65,9 @@ class StatisticServiceImplTest {
     BigDecimal newAverage = newTotalDist.divide(newTotalCalls, 0, RoundingMode.HALF_UP);
 
     assertNotNull(average);
-    assertEquals(averageUpdated.getAverage(), newAverage );
-    assertEquals(averageUpdated.getTotalDist(), newTotalDist );
-    assertEquals(averageUpdated.getTotalCalls(), newTotalCalls );
+    assertEquals(averageUpdated.getAverage(), newAverage);
+    assertEquals(averageUpdated.getTotalDist(), newTotalDist);
+    assertEquals(averageUpdated.getTotalCalls(), newTotalCalls);
   }
 
 
@@ -76,7 +77,7 @@ class StatisticServiceImplTest {
     StatisticCountryInfoDto furthestCountry = statisticService.getFurthestCountry();
 
     assertNotNull(furthestCountry);
-    assertEquals(ipInfoES.getCountryCode(),furthestCountry.getCountryCode());
+    assertEquals(ipInfoES.getCountryCode(), furthestCountry.getCountryCode());
   }
 
   @Test
@@ -85,7 +86,7 @@ class StatisticServiceImplTest {
     StatisticCountryInfoDto nearestCountry = statisticService.getNearestCountry();
 
     assertNotNull(nearestCountry);
-    assertEquals(ipInfoAR.getCountryCode(),nearestCountry.getCountryCode());
+    assertEquals(ipInfoAR.getCountryCode(), nearestCountry.getCountryCode());
 
   }
 
@@ -98,7 +99,9 @@ class StatisticServiceImplTest {
     StatisticCountryInfoDto furthestCountry = statisticService.getFurthestCountry();
 
     assertTrue(furthestCountry.getDistBsAs().compareTo(nearestCountry.getDistBsAs()) > 0);
-    assertTrue(furtest.getCountryInfoDto().getDistBsAs().compareTo(near.getCountryInfoDto().getDistBsAs()) > 0 );
+    assertTrue(
+        furtest.getCountryInfoDto().getDistBsAs().compareTo(near.getCountryInfoDto().getDistBsAs())
+            > 0);
   }
 
   @Test

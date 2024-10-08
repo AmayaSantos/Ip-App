@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CoinsInfoDto {
+
   private Boolean success;
   private String base;
   private Map<String, Double> rates;

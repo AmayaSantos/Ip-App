@@ -5,7 +5,6 @@ import static java.util.Objects.isNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -55,19 +54,23 @@ public class StatisticCountryInfoDto {
   }
 
   private boolean moreClose(StatisticCountryInfoDto other) {
-    if (isNull(outCountryNearestDistance) && isNull(other.outCountryNearestDistance))
+    if (isNull(outCountryNearestDistance) && isNull(other.outCountryNearestDistance)) {
       return getDistBsAs() < other.getDistBsAs();
-    if (isNull(outCountryNearestDistance))
+    }
+    if (isNull(outCountryNearestDistance)) {
       return getDistBsAs() < other.outCountryNearestDistance;
-    return  outCountryNearestDistance < other.getDistBsAs() ;
+    }
+    return outCountryNearestDistance < other.getDistBsAs();
   }
 
   private boolean moreFar(StatisticCountryInfoDto other) {
-    if (isNull(outCountryFarthestDistance) && isNull(other.outCountryFarthestDistance))
+    if (isNull(outCountryFarthestDistance) && isNull(other.outCountryFarthestDistance)) {
       return getDistBsAs() > other.getDistBsAs();
-    if (isNull(outCountryFarthestDistance))
+    }
+    if (isNull(outCountryFarthestDistance)) {
       return getDistBsAs() > other.outCountryFarthestDistance;
-    return  outCountryFarthestDistance > other.getDistBsAs() ;
+    }
+    return outCountryFarthestDistance > other.getDistBsAs();
   }
 
   public StatisticCountryInfoDto getNearest(StatisticCountryInfoDto other) {
@@ -75,21 +78,23 @@ public class StatisticCountryInfoDto {
   }
 
   public StatisticCountryInfoDto getFurthest(StatisticCountryInfoDto other) {
-    return this.moreFar(other) ?  this : other;
+    return this.moreFar(other) ? this : other;
   }
 
   public void updateOutCountryDistance(Double newDistance) {
-    cantCalled=BigDecimal.ONE;
+    cantCalled = BigDecimal.ONE;
     totalDistance = totalDistance.add(BigDecimal.valueOf(newDistance));
-    if (isNull(outCountryFarthestDistance)){
-      outCountryNearestDistance=newDistance;
-      outCountryFarthestDistance=newDistance;
+    if (isNull(outCountryFarthestDistance)) {
+      outCountryNearestDistance = newDistance;
+      outCountryFarthestDistance = newDistance;
     }
 
-    if (outCountryNearestDistance > newDistance)
-      outCountryNearestDistance=newDistance;
+    if (outCountryNearestDistance > newDistance) {
+      outCountryNearestDistance = newDistance;
+    }
 
-    if (outCountryFarthestDistance < newDistance)
-      outCountryFarthestDistance=newDistance;
+    if (outCountryFarthestDistance < newDistance) {
+      outCountryFarthestDistance = newDistance;
+    }
   }
 }

@@ -3,7 +3,6 @@ package meli.ipApp.swagger;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.servers.Server;
 import java.util.List;
 import org.springdoc.core.models.GroupedOpenApi;
@@ -27,7 +26,6 @@ public class SwaggerConfig {
     Server server = new Server();
     server.setUrl("http://localhost:8080");
     server.setDescription("Development");
-
 
     Contact myContact = new Contact();
     myContact.setName("falsa 123");

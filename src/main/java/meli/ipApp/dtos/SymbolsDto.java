@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SymbolsDto {
+
   private Boolean success;
   private Map<String, String> symbols;
 }

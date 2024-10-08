@@ -27,21 +27,21 @@ public class Mocks {
   public static CountryInfoDto mockCountryES = CountryInfoDto.builder()
       .alpha2Code("ES")
       .latlng(List.of(40.0, -4.0))
-      .languages(Set.of(new CountryLanguageDto("Spanish","es")))
-      .timezones(List.of("UTC","UTC+01:00"))
+      .languages(Set.of(new CountryLanguageDto("Spanish", "es")))
+      .timezones(List.of("UTC", "UTC+01:00"))
       .timezonesCustom(new ArrayList<>())
       .currencies(new HashSet<>())
       .currencies(Set.of(new CountryCoinInfoDto("EUR", null)))
       .build();
 
   public static Set<CountryInfoDto> mockCountries =
-      Set.of(Mocks.mockCountryAR,mockCountryES);
+      Set.of(Mocks.mockCountryAR, mockCountryES);
 
   public static Map<String, CountryInfoDto> mockCountriesInService =
       Map.of(
           CountryInfoDto.OUT_COUNTRY().getAlpha2Code(), CountryInfoDto.OUT_COUNTRY(),
           Mocks.mockCountryAR.getAlpha2Code(), Mocks.mockCountryAR,
-          Mocks.mockCountryES.getAlpha2Code(),Mocks.mockCountryES);
+          Mocks.mockCountryES.getAlpha2Code(), Mocks.mockCountryES);
 
   public static CoinsInfoDto mockCoins = CoinsInfoDto.builder()
       .base("EUR")
@@ -49,7 +49,7 @@ public class Mocks {
       .build();
 
   public static SymbolsDto mockSymbols = new SymbolsDto(true,
-      Map.of("EUR", "Euro","USD","Dollar", "ARS","Arge"));
+      Map.of("EUR", "Euro", "USD", "Dollar", "ARS", "Arge"));
 
   public static CoinsInfoDto mockCoinsClientWithOutUSD = CoinsInfoDto.builder()
       .base("EUR")
@@ -58,7 +58,7 @@ public class Mocks {
 
   public static CoinsInfoDto mockCoinsClientBaseUSD = CoinsInfoDto.builder()
       .base("USD")
-      .rates(Map.of("EUR", 1.0, "ARS", 1000.0,"USD", 1.0))
+      .rates(Map.of("EUR", 1.0, "ARS", 1000.0, "USD", 1.0))
       .build();
 
   public static CoinsInfoDto mockCoinsUpdated = CoinsInfoDto.builder()

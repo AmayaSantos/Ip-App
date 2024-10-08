@@ -2,9 +2,7 @@ package meli.ipApp.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import meli.ipApp.dtos.IpInfoDto;
-import meli.ipApp.dtos.StatisticDto;
 import meli.ipApp.services.IpService;
-import meli.ipApp.services.StatisticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -9,12 +9,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Scheduler {
+
   private final Logger logger = LoggerFactory.getLogger(Scheduler.class);
 
   @Autowired
   private CountryServiceImpl countryService;
 
-  @Scheduled(fixedRate = 1000/*seg*/*60/*min*/*60/*hrs*/)
+  @Scheduled(fixedRate = 1000/*seg*/ * 60/*min*/ * 60/*hrs*/)
   public void reportCurrentTime() {
     countryService.updateCoins();
   }

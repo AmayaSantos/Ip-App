@@ -26,9 +26,6 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(classes = {TestConfig.class,})
 class CountryServiceImplTest {
 
-  public static final String AR = "AR";
-  public static final String NOT_COUNTRY_NAME = "NOT COUNTRY NAME";
-
   @Autowired
   private CoinClient coinClient;
 
