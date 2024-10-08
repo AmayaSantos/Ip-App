@@ -27,7 +27,4 @@ public class IpInfoDto {
     return countryInfoDto.isOutCountry();
   }
 
-  public void setOutCountryCode() {
-    this.countryCode= countryInfoDto.getAlpha2Code();
-  }
 }

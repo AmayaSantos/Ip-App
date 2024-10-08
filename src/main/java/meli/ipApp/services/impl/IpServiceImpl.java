@@ -1,7 +1,6 @@
 package meli.ipApp.services.impl;
 
 import meli.ipApp.clients.IpClient;
-import meli.ipApp.dtos.CountryInfoDto;
 import meli.ipApp.dtos.IpInfoDto;
 import meli.ipApp.services.CountryService;
 import meli.ipApp.services.IpService;
@@ -26,11 +25,7 @@ public class IpServiceImpl implements IpService {
   @Override
   public IpInfoDto getIpInfo(String ip) {
     IpInfoDto ipInfo = ipClient.getIpInfo(ip);
-    ipInfo.setCountryInfoDto(countryService.getCountryInfo(ipInfo.getCountryCode()));
-
-    if (ipInfo.isOutCountry())
-      ipInfo.setOutCountryCode();
-
+    ipInfo.setCountryInfoDto(countryService.getCountryInfo(ipInfo));
     ipInfo.setTime();
     statisticService.updateStatisticsWith(ipInfo);
     return ipInfo;

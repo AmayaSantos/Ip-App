@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import meli.ipApp.clients.CountryClient;
 import meli.ipApp.dtos.CountryInfoDto;
+import meli.ipApp.dtos.IpInfoDto;
 import meli.ipApp.exepctions.AppException;
 import meli.ipApp.exepctions.errors.CountryError;
 import meli.ipApp.services.CoinService;
@@ -47,12 +48,16 @@ public class CountryServiceImpl implements CountryService {
 
   @PostConstruct
   private void setup() {
-    Set<CountryInfoDto> countries = countryClient.getCountriesInfos();
-    countryInfoMap = new HashMap<>(countries.size() + NumberUtils.INTEGER_ONE);
-    addCountry(CountryInfoDto.OUT_COUNTRY());
-    addCountriesByService(countries);
-    setSupportedCoinsInCountries();
-    updateCoins();
+    try {
+      Set<CountryInfoDto> countries = countryClient.getCountriesInfos();
+      countryInfoMap = new HashMap<>(countries.size() + NumberUtils.INTEGER_ONE);
+      addCountry(CountryInfoDto.OUT_COUNTRY());
+      addCountriesByService(countries);
+      setSupportedCoinsInCountries();
+      updateCoins();
+    } catch (AppException e) {
+      new IllegalStateException(e.getMessage());
+    }
   }
 
   private void setSupportedCoinsInCountries() {
@@ -121,17 +126,19 @@ public class CountryServiceImpl implements CountryService {
   }
 
   @Override
-  public CountryInfoDto getCountryInfo(String countryCode) {
+  public CountryInfoDto getCountryInfo(IpInfoDto ipInfoDto) {
     lock.lock();
     try {
       CountryInfoDto copy = countryInfoMap
           .getOrDefault(
-              countryCode,
+              ipInfoDto.getCountryCode(),
               CountryInfoDto.OUT_COUNTRY())
           .copy();
 
-      if (copy.isOutCountry())
-        copy.setDistBsAs(HaversineCalculator.haversine(copy,baseCountry));
+      if (copy.isOutCountry()) {
+        copy.setDistBsAs(HaversineCalculator.haversine(baseCountry, ipInfoDto));
+        ipInfoDto.setCountryCode(copy.getAlpha2Code());
+      }
 
       logger.info("country copy of {}", copy.getAlpha2Code());
       return copy;
